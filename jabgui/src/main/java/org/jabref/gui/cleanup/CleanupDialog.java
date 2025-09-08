@@ -2,7 +2,8 @@ package org.jabref.gui.cleanup;
 
 import java.util.EnumSet;
 
-import javafx.scene.control.ButtonType;
+import javafx.fxml.FXML;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 
@@ -13,34 +14,39 @@ import org.jabref.logic.cleanup.FieldFormatterCleanups;
 import org.jabref.logic.l10n.Localization;
 import org.jabref.model.database.BibDatabaseContext;
 
-public class CleanupDialog extends BaseDialog<CleanupPreferences> {
-    public CleanupDialog(BibDatabaseContext databaseContext, CleanupPreferences initialPreset, FilePreferences filePreferences) {
-        setTitle(Localization.lang("Clean up entries"));
-        getDialogPane().setPrefSize(600, 650);
-        getDialogPane().getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
+import com.airhacks.afterburner.views.ViewLoader;
 
-        System.out.println("running cleanup panel");
+public class CleanupDialog extends BaseDialog<CleanupPreferences> {
+
+    @FXML private TabPane tabPane;
+
+    public CleanupDialog(BibDatabaseContext databaseContext, CleanupPreferences initialPreset, FilePreferences filePreferences) {
+
+        setTitle(Localization.lang("Clean up entries"));
+
+        // Load FXML
+        ViewLoader.view(this)
+                  .load()
+                  .setAsDialogPane(this);
 
         CleanupSingleFieldPanel singleFieldPanel = new CleanupSingleFieldPanel(initialPreset);
         CleanupFileRelatedPanel fileRelatedPanel = new CleanupFileRelatedPanel(databaseContext, initialPreset, filePreferences);
         CleanupMultiFieldPanel multiFieldPanel = new CleanupMultiFieldPanel(initialPreset);
 
-        // placing the content of the presetPanel in a tab pane
-        TabPane tabPane = new TabPane();
         tabPane.getTabs().addAll(
-                new Tab("Single field", singleFieldPanel),
-                new Tab("File-related", fileRelatedPanel),
-                new Tab("Multi-field", multiFieldPanel)
+                new Tab(Localization.lang("Single field"), singleFieldPanel),
+                new Tab(Localization.lang("File-related"), fileRelatedPanel),
+                new Tab(Localization.lang("Multi-field"), multiFieldPanel)
         );
-        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-
-        getDialogPane().setContent(tabPane);
 
         setResultConverter(button -> {
-            if (button == ButtonType.OK) {
+            if (button.getButtonData() == ButtonBar.ButtonData.OK_DONE) {
                 EnumSet<CleanupPreferences.CleanupStep> allActiveJobs = EnumSet.noneOf(CleanupPreferences.CleanupStep.class);
+
                 allActiveJobs.addAll(fileRelatedPanel.getActiveJobs());
                 allActiveJobs.addAll(multiFieldPanel.getActiveJobs());
+
+                // Always include this step, as file links need to be fixed in every cleanup
                 allActiveJobs.add(CleanupPreferences.CleanupStep.FIX_FILE_LINKS);
 
                 FieldFormatterCleanups formatterCleanups = singleFieldPanel.getFieldFormatterCleanups();
