@@ -89,6 +89,7 @@ Note that this project **does not** adhere to [Semantic Versioning](https://semv
 - We improved the for the web search tab in the preferences dialog [#13791](https://github.com/JabRef/jabref/pull/13791)
 - We improved the event viewer for debugging [#13783](https://github.com/JabRef/jabref/pull/13783).
 - We improved "REDACTED" replacement of API key value in web fetcher search URL [#13796](https://github.com/JabRef/jabref/issues/13796)
+- We separated the "Clean up entries" dialog into three tabs for clarity [13819](https://github.com/JabRef/jabref/issues/13819)
 
 ### Fixed
 
