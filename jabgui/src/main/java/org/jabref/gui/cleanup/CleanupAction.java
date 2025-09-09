@@ -1,6 +1,7 @@
 package org.jabref.gui.cleanup;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -20,6 +21,7 @@ import org.jabref.gui.undo.UndoableFieldChange;
 import org.jabref.logic.JabRefException;
 import org.jabref.logic.cleanup.CleanupPreferences;
 import org.jabref.logic.cleanup.CleanupWorker;
+import org.jabref.logic.cleanup.FieldFormatterCleanups;
 import org.jabref.logic.l10n.Localization;
 import org.jabref.logic.preferences.CliPreferences;
 import org.jabref.logic.util.BackgroundTask;
@@ -94,8 +96,10 @@ public class CleanupAction extends SimpleCommand {
                 }
             }
 
-            preferences.getCleanupPreferences().setActiveJobs(preset.getActiveJobs());
-            preferences.getCleanupPreferences().setFieldFormatterCleanups(preset.getFieldFormatterCleanups());
+            CleanupPreferences merged = mergePresets(preferences.getCleanupPreferences(), preset);
+
+            preferences.getCleanupPreferences().setActiveJobs(merged.getActiveJobs());
+            preferences.getCleanupPreferences().setFieldFormatterCleanups(merged.getFieldFormatterCleanups());
 
             BackgroundTask.wrap(() -> cleanup(stateManager.getActiveDatabase().get(), preset))
                           .onSuccess(result -> showResults())
@@ -178,5 +182,17 @@ public class CleanupAction extends SimpleCommand {
         Platform.runLater(() ->
                 dialogService.showErrorDialogAndWait(Localization.lang("File Move Errors"), message)
         );
+    }
+
+    private CleanupPreferences mergePresets(CleanupPreferences original, CleanupPreferences updatedTab) {
+        EnumSet<CleanupPreferences.CleanupStep> mergedJobs = EnumSet.copyOf(original.getActiveJobs());
+        mergedJobs.removeAll(updatedTab.getActiveJobs());
+        mergedJobs.addAll(updatedTab.getActiveJobs());
+
+        FieldFormatterCleanups mergedFormatters = updatedTab.getFieldFormatterCleanups() != null
+                ? updatedTab.getFieldFormatterCleanups()
+                : original.getFieldFormatterCleanups();
+
+        return new CleanupPreferences(mergedJobs, mergedFormatters);
     }
 }

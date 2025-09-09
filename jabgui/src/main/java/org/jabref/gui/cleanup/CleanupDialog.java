@@ -1,7 +1,5 @@
 package org.jabref.gui.cleanup;
 
-import java.util.EnumSet;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Tab;
@@ -10,7 +8,6 @@ import javafx.scene.control.TabPane;
 import org.jabref.gui.util.BaseDialog;
 import org.jabref.logic.FilePreferences;
 import org.jabref.logic.cleanup.CleanupPreferences;
-import org.jabref.logic.cleanup.FieldFormatterCleanups;
 import org.jabref.logic.l10n.Localization;
 import org.jabref.model.database.BibDatabaseContext;
 
@@ -40,17 +37,9 @@ public class CleanupDialog extends BaseDialog<CleanupPreferences> {
 
         setResultConverter(button -> {
             if (button.getButtonData() == ButtonBar.ButtonData.OK_DONE) {
-                EnumSet<CleanupPreferences.CleanupStep> allActiveJobs = EnumSet.noneOf(CleanupPreferences.CleanupStep.class);
-
-                allActiveJobs.addAll(fileRelatedPanel.getActiveJobs());
-                allActiveJobs.addAll(multiFieldPanel.getActiveJobs());
-
-                // Always include this step, as file links need to be fixed in every cleanup
-                allActiveJobs.add(CleanupPreferences.CleanupStep.FIX_FILE_LINKS);
-
-                FieldFormatterCleanups formatterCleanups = singleFieldPanel.getFieldFormatterCleanups();
-
-                return new CleanupPreferences(allActiveJobs, formatterCleanups);
+                Tab selectedTab = tabPane.getSelectionModel().getSelectedItem();
+                CleanupPanel panel = (CleanupPanel) selectedTab.getContent();
+                return panel.getCleanupPreferences();
             } else {
                 return null;
             }

@@ -10,7 +10,7 @@ import org.jabref.logic.cleanup.CleanupPreferences;
 
 import com.airhacks.afterburner.views.ViewLoader;
 
-public class CleanupMultiFieldPanel extends VBox {
+public class CleanupMultiFieldPanel extends VBox implements CleanupPanel {
     @FXML private CheckBox cleanUpDOI;
     @FXML private CheckBox cleanUpEprint;
     @FXML private CheckBox cleanUpURL;
@@ -68,7 +68,8 @@ public class CleanupMultiFieldPanel extends VBox {
         cleanUpTimestampToModificationDate.setSelected(preset.isActive(CleanupPreferences.CleanupStep.DO_NOT_CONVERT_TIMESTAMP));
     }
 
-    public EnumSet<CleanupPreferences.CleanupStep> getActiveJobs() {
+    @Override
+    public CleanupPreferences getCleanupPreferences() {
         EnumSet<CleanupPreferences.CleanupStep> activeJobs = EnumSet.noneOf(CleanupPreferences.CleanupStep.class);
 
         if (cleanUpDOI.isSelected()) {
@@ -93,6 +94,20 @@ public class CleanupMultiFieldPanel extends VBox {
             activeJobs.add(CleanupPreferences.CleanupStep.CONVERT_TIMESTAMP_TO_MODIFICATIONDATE);
         }
 
-        return activeJobs;
+        return new CleanupPreferences(activeJobs);
+    }
+
+    @Override
+    public EnumSet<CleanupPreferences.CleanupStep> getTabSteps() {
+        return EnumSet.of(
+                CleanupPreferences.CleanupStep.CLEAN_UP_DOI,
+                CleanupPreferences.CleanupStep.CLEANUP_EPRINT,
+                CleanupPreferences.CleanupStep.CLEAN_UP_URL,
+                CleanupPreferences.CleanupStep.CONVERT_TO_BIBLATEX,
+                CleanupPreferences.CleanupStep.CONVERT_TO_BIBTEX,
+                CleanupPreferences.CleanupStep.CONVERT_TIMESTAMP_TO_CREATIONDATE,
+                CleanupPreferences.CleanupStep.CONVERT_TIMESTAMP_TO_MODIFICATIONDATE,
+                CleanupPreferences.CleanupStep.DO_NOT_CONVERT_TIMESTAMP
+        );
     }
 }

@@ -17,7 +17,7 @@ import org.jabref.model.entry.field.StandardField;
 
 import com.airhacks.afterburner.views.ViewLoader;
 
-public class CleanupFileRelatedPanel extends VBox {
+public class CleanupFileRelatedPanel extends VBox implements CleanupPanel {
 
     @FXML private Label cleanupRenamePDFLabel;
 
@@ -71,7 +71,7 @@ public class CleanupFileRelatedPanel extends VBox {
         cleanUpDeletedFiles.setSelected(preset.isActive(CleanupPreferences.CleanupStep.CLEAN_UP_DELETED_LINKED_FILES));
     }
 
-    public EnumSet<CleanupPreferences.CleanupStep> getActiveJobs() {
+    public CleanupPreferences getCleanupPreferences() {
         EnumSet<CleanupPreferences.CleanupStep> activeJobs = EnumSet.noneOf(CleanupPreferences.CleanupStep.class);
 
         if (cleanUpMakePathsRelative.isSelected()) {
@@ -91,6 +91,18 @@ public class CleanupFileRelatedPanel extends VBox {
             activeJobs.add(CleanupPreferences.CleanupStep.CLEAN_UP_DELETED_LINKED_FILES);
         }
 
-        return activeJobs;
+        return new CleanupPreferences(activeJobs);
+    }
+
+    @Override
+    public EnumSet<CleanupPreferences.CleanupStep> getTabSteps() {
+        return EnumSet.of(
+                CleanupPreferences.CleanupStep.MOVE_PDF,
+                CleanupPreferences.CleanupStep.MAKE_PATHS_RELATIVE,
+                CleanupPreferences.CleanupStep.RENAME_PDF,
+                CleanupPreferences.CleanupStep.RENAME_PDF_ONLY_RELATIVE_PATHS,
+                CleanupPreferences.CleanupStep.CLEAN_UP_UPGRADE_EXTERNAL_LINKS,
+                CleanupPreferences.CleanupStep.CLEAN_UP_DELETED_LINKED_FILES
+        );
     }
 }
