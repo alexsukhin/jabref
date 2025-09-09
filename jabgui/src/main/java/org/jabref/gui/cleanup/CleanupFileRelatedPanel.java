@@ -2,7 +2,6 @@ package org.jabref.gui.cleanup;
 
 import java.nio.file.Path;
 import java.util.EnumSet;
-import java.util.Objects;
 import java.util.Optional;
 
 import javafx.fxml.FXML;
@@ -20,7 +19,6 @@ import com.airhacks.afterburner.views.ViewLoader;
 
 public class CleanupFileRelatedPanel extends VBox {
 
-    private final BibDatabaseContext databaseContext;
     @FXML private Label cleanupRenamePDFLabel;
 
     @FXML private CheckBox cleanUpMovePDF;
@@ -31,17 +29,15 @@ public class CleanupFileRelatedPanel extends VBox {
     @FXML private CheckBox cleanUpUpgradeExternalLinks;
 
     public CleanupFileRelatedPanel(BibDatabaseContext databaseContext, CleanupPreferences cleanupPreferences, FilePreferences filePreferences) {
-        this.databaseContext = Objects.requireNonNull(databaseContext);
-
         // Load FXML
         ViewLoader.view(this)
                   .root(this)
                   .load();
 
-        init(cleanupPreferences, filePreferences);
+        init(databaseContext, cleanupPreferences, filePreferences);
     }
 
-    private void init(CleanupPreferences cleanupPreferences, FilePreferences filePreferences) {
+    private void init(BibDatabaseContext databaseContext, CleanupPreferences cleanupPreferences, FilePreferences filePreferences) {
         Optional<Path> firstExistingDir = databaseContext.getFirstExistingFileDir(filePreferences);
         if (firstExistingDir.isPresent()) {
             cleanUpMovePDF.setText(Localization.lang("Move linked files to default file directory %0", firstExistingDir.get().toString()));
