@@ -21,7 +21,6 @@ public class CleanupDialog extends BaseDialog<CleanupPreferences> {
     @FXML private TabPane tabPane;
 
     public CleanupDialog(BibDatabaseContext databaseContext, CleanupPreferences initialPreset, FilePreferences filePreferences) {
-
         setTitle(Localization.lang("Clean up entries"));
 
         // Load FXML
