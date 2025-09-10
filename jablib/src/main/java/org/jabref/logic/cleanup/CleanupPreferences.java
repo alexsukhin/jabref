@@ -145,6 +145,6 @@ public class CleanupPreferences {
     public enum CleanupStepCategory {
         MULTI_FIELD,
         FILE_RELATED,
-        NONE;
+        NONE
     }
 }
