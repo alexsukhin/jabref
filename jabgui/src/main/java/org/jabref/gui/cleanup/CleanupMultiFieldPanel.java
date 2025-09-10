@@ -96,18 +96,4 @@ public class CleanupMultiFieldPanel extends VBox implements CleanupPanel {
 
         return new CleanupPreferences(activeJobs);
     }
-
-    @Override
-    public EnumSet<CleanupPreferences.CleanupStep> getTabSteps() {
-        return EnumSet.of(
-                CleanupPreferences.CleanupStep.CLEAN_UP_DOI,
-                CleanupPreferences.CleanupStep.CLEANUP_EPRINT,
-                CleanupPreferences.CleanupStep.CLEAN_UP_URL,
-                CleanupPreferences.CleanupStep.CONVERT_TO_BIBLATEX,
-                CleanupPreferences.CleanupStep.CONVERT_TO_BIBTEX,
-                CleanupPreferences.CleanupStep.CONVERT_TIMESTAMP_TO_CREATIONDATE,
-                CleanupPreferences.CleanupStep.CONVERT_TIMESTAMP_TO_MODIFICATIONDATE,
-                CleanupPreferences.CleanupStep.DO_NOT_CONVERT_TIMESTAMP
-        );
-    }
 }

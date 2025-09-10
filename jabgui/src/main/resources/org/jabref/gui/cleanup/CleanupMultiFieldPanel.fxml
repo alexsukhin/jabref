@@ -7,6 +7,10 @@
          fx:controller="org.jabref.gui.cleanup.CleanupMultiFieldPanel"
          spacing="10.0" type="VBox">
 
+    <padding>
+        <Insets top="10.0"/>
+    </padding>
+
     <VBox>
         <VBox.margin>
             <Insets left="20.0" />

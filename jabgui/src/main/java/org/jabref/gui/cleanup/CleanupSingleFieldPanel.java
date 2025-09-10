@@ -1,7 +1,5 @@
 package org.jabref.gui.cleanup;
 
-import java.util.EnumSet;
-
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
@@ -38,10 +36,5 @@ public class CleanupSingleFieldPanel extends VBox implements CleanupPanel {
                 formatterCleanupsPanel.cleanupsProperty()
         );
         return new CleanupPreferences(fieldFormatterCleanups);
-    }
-
-    @Override
-    public EnumSet<CleanupPreferences.CleanupStep> getTabSteps() {
-        return EnumSet.noneOf(CleanupPreferences.CleanupStep.class);
     }
 }

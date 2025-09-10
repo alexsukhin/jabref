@@ -93,16 +93,4 @@ public class CleanupFileRelatedPanel extends VBox implements CleanupPanel {
 
         return new CleanupPreferences(activeJobs);
     }
-
-    @Override
-    public EnumSet<CleanupPreferences.CleanupStep> getTabSteps() {
-        return EnumSet.of(
-                CleanupPreferences.CleanupStep.MOVE_PDF,
-                CleanupPreferences.CleanupStep.MAKE_PATHS_RELATIVE,
-                CleanupPreferences.CleanupStep.RENAME_PDF,
-                CleanupPreferences.CleanupStep.RENAME_PDF_ONLY_RELATIVE_PATHS,
-                CleanupPreferences.CleanupStep.CLEAN_UP_UPGRADE_EXTERNAL_LINKS,
-                CleanupPreferences.CleanupStep.CLEAN_UP_DELETED_LINKED_FILES
-        );
-    }
 }
